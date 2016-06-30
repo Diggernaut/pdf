@@ -418,7 +418,7 @@ func (p Page) Content() Content {
 			Trm := matrix{{g.Tfs * g.Th, 0, 0}, {0, g.Tfs, 0}, {0, g.Trise, 1}}.mul(g.Tm).mul(g.CTM)
 			w0 := g.Tf.Width(int(s[n]))
 			n++
-			if ch != ' ' {
+			if true || ch != ' ' {
 				f := g.Tf.BaseFont()
 				if i := strings.Index(f, "+"); i >= 0 {
 					f = f[i+1:]
