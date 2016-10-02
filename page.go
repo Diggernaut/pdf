@@ -618,7 +618,7 @@ func (p Page) Content() []Content {
 	cc := []Content{}
 	fmt.Println(p.V.Key("Contents").Len())
 	if p.V.Key("Contents").Len() > 0 {
-		for index := 0; index < p.V.Key("Contents").Len()-1; index++ {
+		for index := 0; index < p.V.Key("Contents").Len(); index++ {
 			strm := p.V.Key("Contents").Index(index)
 			cc = append(cc, p.SingleContent(strm))
 		}
