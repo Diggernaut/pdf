@@ -661,7 +661,8 @@ func (v Value) Key(key string) Value {
 		}
 		x = strm.hdr
 	}
-	return v.r.resolve(v.ptr, x[name(key)])
+	el := x[name(key)]
+	return v.r.resolve(v.ptr, el)
 }
 
 // Keys returns a sorted list of the keys in the dictionary v.
@@ -707,6 +708,7 @@ func (v Value) Len() int {
 
 func (r *Reader) resolve(parent objptr, x interface{}) Value {
 	if ptr, ok := x.(objptr); ok {
+		
 		if ptr.id >= uint32(len(r.xref)) {
 			return Value{}
 		}

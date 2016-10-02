@@ -367,6 +367,7 @@ type Text struct {
 	Y        float64 // the Y coordinate, in points, increasing bottom to top
 	W        float64 // the width of the text, in points
 	S        string  // the actual UTF-8 text
+	Seg      int     // segment id
 }
 
 // A Rect represents a rectangle.
@@ -382,7 +383,7 @@ type Point struct {
 
 // Content describes the basic content on a page: the text and any drawn rectangles.
 type Content struct {
-	Text []Text
+	Text []*Text
 	Rect []Rect
 }
 
@@ -410,8 +411,7 @@ func (p Page) Content() Content {
 		Th:  1,
 		CTM: ident,
 	}
-
-	var text []Text
+	var text []*Text
 	showText := func(s string) {
 		n := 0
 		for _, ch := range enc.Decode(s) {
@@ -423,7 +423,7 @@ func (p Page) Content() Content {
 				if i := strings.Index(f, "+"); i >= 0 {
 					f = f[i+1:]
 				}
-				text = append(text, Text{f, Trm[0][0], Trm[2][0], Trm[2][1], w0 / 1000 * Trm[0][0], string(ch)})
+				text = append(text, &Text{f, Trm[0][0], Trm[2][0], Trm[2][1], w0 / 1000 * Trm[0][0], string(ch), 0})
 			}
 			tx := w0/1000*g.Tfs + g.Tc
 			if ch == ' ' {

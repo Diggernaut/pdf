@@ -62,6 +62,7 @@ func Interpret(strm Value, do func(stk *Stack, op string)) {
 Reading:
 	for {
 		tok := b.readToken()
+
 		if tok == io.EOF {
 			break
 		}
