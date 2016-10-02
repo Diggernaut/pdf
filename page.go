@@ -402,11 +402,8 @@ type gstate struct {
 	CTM   matrix
 }
 
-// Content returns the page's content.
-func (p Page) Content() Content {
-	strm := p.V.Key("Contents")
+func (p Page) SingleContent(strm Value) Content {
 	var enc TextEncoding = &nopEncoder{}
-
 	var g = gstate{
 		Th:  1,
 		CTM: ident,
@@ -484,9 +481,11 @@ func (p Page) Content() Content {
 			gstack = append(gstack, g)
 
 		case "Q": // restore graphics state
-			n := len(gstack) - 1
-			g = gstack[n]
-			gstack = gstack[:n]
+			if len(gstack) > 0 {
+				n := len(gstack) - 1
+				g = gstack[n]
+				gstack = gstack[:n]
+			}
 
 		case "BT": // begin text (reset text matrix and line matrix)
 			g.Tm = ident
@@ -612,6 +611,23 @@ func (p Page) Content() Content {
 		}
 	})
 	return Content{text, rect}
+}
+
+// Content returns the page's content.
+func (p Page) Content() []Content {
+	cc := []Content{}
+	fmt.Println(p.V.Key("Contents").Len())
+	if p.V.Key("Contents").Len() > 0 {
+		for index := 0; index < p.V.Key("Contents").Len()-1; index++ {
+			strm := p.V.Key("Contents").Index(index)
+			cc = append(cc, p.SingleContent(strm))
+		}
+	}else{
+		strm := p.V.Key("Contents")
+		cc = append(cc, p.SingleContent(strm))
+
+	}
+	return cc
 }
 
 // TextVertical implements sort.Interface for sorting
