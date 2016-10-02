@@ -404,6 +404,7 @@ type gstate struct {
 // Content returns the page's content.
 func (p Page) Content() interface{} {
 	strm := p.V.Key("Contents")
+	
 	if p.V.Key("Contents").Len() > 0 {
 		cc := []Content{}
 		for index := 0; index < p.V.Key("Contents").Len(); index++ {
